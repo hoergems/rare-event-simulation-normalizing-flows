@@ -270,12 +270,14 @@ class DoubleSlitExperiment:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--load_model', action='store_true')
-    parser.add_argument('-D', '--num_dims', type=int, default=2)
-    parser.add_argument('-i', '--iterations', type=int, default=1)
-    parser.add_argument('-s', '--save_iteration', type=int, default=1000)
-    parser.add_argument('-b', '--batch_size', type=int, default=1000)
-    parser.add_argument('-p', '--num_plotted_paths', type=int, default=100)
+    parser.add_argument('-D', '--num_dims', type=int, default=100, help="Number of dimensions. num_dims/2 corresponds to the number of time steps. Must be an even number")
+    parser.add_argument('-i', '--iterations', type=int, default=10000, help="Number of training iterations")
+    parser.add_argument('-s', '--save_iteration', type=int, default=1000, help="Save the model every save_iteration iterations")
+    parser.add_argument('-b', '--batch_size', type=int, default=64, help="Batch size")
+    parser.add_argument('-p', '--num_plotted_paths', type=int, default=100, help="Number of plotted paths")
     args = parser.parse_args()
+
+    assert args.num_dims > 2 and args.num_dims % 2 == 0, "num_dims must be greater than 2 and an even number"
 
     double_slit_experiment = DoubleSlitExperiment(args)       
     train_net(double_slit_experiment._net, double_slit_experiment._trainer, double_slit_experiment._results, args.iterations, double_slit_experiment.target_weight,
